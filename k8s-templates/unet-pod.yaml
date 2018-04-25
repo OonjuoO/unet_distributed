@@ -3,6 +3,7 @@ apiVersion: v1
 kind: Pod
 metadata:
   name: dataset-download
+  namespace: kubecon
 spec:
   containers:
   - name: dataset

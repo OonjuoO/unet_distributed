@@ -1,0 +1,36 @@
+---
+apiVersion: kubeflow.org/v1alpha1
+kind: TFJob
+metadata:
+  name: dist-unet-1
+  namespace: kubecon
+spec:
+  replicaSpecs:
+  - replicas: 3
+    template:
+      spec:
+        containers:
+        - image: docker.io/raddaoui/tfjob_unet_distributed:2.0
+          name: tensorflow
+          volumeMounts:
+          - name: dataset-storage
+            mountPath: /tmp/data
+        restartPolicy: OnFailure
+        volumes:
+        - name: dataset-storage
+          persistentVolumeClaim:
+           claimName: unet-dataset
+           readOnly: true
+    tfReplicaType: WORKER
+  - replicas: 1
+    template:
+      spec:
+        containers:
+        - image: docker.io/raddaoui/tfjob_unet_distributed:2.0
+          name: tensorflow
+        restartPolicy: OnFailure
+    tfReplicaType: PS
+  terminationPolicy:
+    chief:
+      replicaIndex: 0
+      replicaName: WORKER

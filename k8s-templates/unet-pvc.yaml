@@ -3,11 +3,12 @@ apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: unet-dataset
+  namespace: kubecon
 spec:
   accessModes:
   - ReadWriteOnce
   resources:
     requests:
       storage: 19Gi
-  storageClassName: standard
+  storageClassName: rook-block
 
