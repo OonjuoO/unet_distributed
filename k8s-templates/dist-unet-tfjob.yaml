@@ -2,7 +2,7 @@
 apiVersion: kubeflow.org/v1alpha1
 kind: TFJob
 metadata:
-  name: dist-unet-1
+  name: dist-unet
   namespace: kubecon
 spec:
   replicaSpecs:
@@ -12,6 +12,29 @@ spec:
         containers:
         - image: docker.io/raddaoui/tfjob_unet_distributed:2.0
           name: tensorflow
+          env:
+          - name: AWS_ACCESS_KEY_ID
+            valueFrom:
+              secretKeyRef:
+                name: gcs-creds
+                key: AWS_ACCESS_KEY_ID
+          - name: AWS_SECRET_ACCESS_KEY
+            valueFrom:
+              secretKeyRef:
+                name: gcs-creds
+                key: AWS_SECRET_ACCESS_KEY
+          - name: AWS_REGION
+            value: "us-west-1"
+          - name: S3_REGION
+            value: "us-west-1"
+          - name: S3_USE_HTTPS
+            value: "true"
+          - name: S3_VERIFY_SSL
+            value: "true"
+          - name: S3_ENDPOINT
+            value: "storage.googleapis.com"
+          - name: OUTPUT_PATH
+            value: "s3://alakubecon/distunet"
           volumeMounts:
           - name: dataset-storage
             mountPath: /tmp/data
