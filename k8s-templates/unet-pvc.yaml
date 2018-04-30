@@ -10,5 +10,5 @@ spec:
   resources:
     requests:
       storage: 19Gi
-  storageClassName: standard
+  storageClassName: rook-block
 

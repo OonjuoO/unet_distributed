@@ -6,11 +6,14 @@ metadata:
   namespace: kubecon
 spec:
   replicaSpecs:
-  - replicas: 5
+  - replicas: 3
     template:
       spec:
         containers:
-        - image: docker.io/raddaoui/tfjob_unet_distributed:2.0
+        - args:
+          - --epochs
+          - "10"
+          image: docker.io/raddaoui/tfjob_unet_distributed:2.0
           name: tensorflow
           env:
           - name: AWS_ACCESS_KEY_ID
@@ -49,7 +52,10 @@ spec:
     template:
       spec:
         containers:
-        - image: docker.io/raddaoui/tfjob_unet_distributed:2.0
+        - args:
+          - --epochs
+          - "10"
+          image: docker.io/raddaoui/tfjob_unet_distributed:2.0
           name: tensorflow
         restartPolicy: OnFailure
     tfReplicaType: PS
